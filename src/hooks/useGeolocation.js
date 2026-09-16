@@ -1,7 +1,8 @@
 import { useEffect } from "react";
 
-// Requests geolocation once on mount, calls onLocated on success or onError on failure.
-export function useGeolocation({ onLocated, onError } = {}) {
+// Requests geolocation on mount (and again whenever `retryKey` changes),
+// calls onLocated on success or onError(err) on failure.
+export function useGeolocation({ onLocated, onError, retryKey = 0 } = {}) {
   useEffect(() => {
     if (!("geolocation" in navigator)) {
       onError?.();
@@ -12,5 +13,5 @@ export function useGeolocation({ onLocated, onError } = {}) {
       (err) => onError?.(err)
     );
     /* eslint-disable-next-line react-hooks/exhaustive-deps */
-  }, []);
+  }, [retryKey]);
 }
