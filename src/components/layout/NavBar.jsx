@@ -36,15 +36,21 @@ export default function NavBar() {
     <header className="floating-navbar-wrapper">
       <div className="navbar-inner">
         <div className="floating-navbar-container">
-          {/* <Link to="/" className="brand-pill">
-            <Home
-              size={18}
-              strokeWidth={2.2}
-              aria-hidden="true"
-              className="me-1"
-            />
-            Family First
-          </Link> */}
+          {/* Hamburger (≤768px, left side) */}
+          <button
+            className="navbar-toggler border-0 shadow-none d-md-none"
+            type="button"
+            aria-controls="navMobileMenu"
+            aria-expanded={open}
+            aria-label="Toggle navigation"
+            onClick={() => setOpen(!open)}
+          >
+            <span className="hamburger-icon">
+              <span></span>
+              <span></span>
+              <span></span>
+            </span>
+          </button>
 
           {/* Center Navigation Capsule (≥768px) */}
           <nav className="center-nav-capsule d-none d-md-flex">
@@ -119,22 +125,6 @@ export default function NavBar() {
                 Log out
               </button>
             ) : null}
-
-            {/* Hamburger (≤768px) */}
-            <button
-              className="navbar-toggler border-0 shadow-none d-md-none"
-              type="button"
-              aria-controls="navMobileMenu"
-              aria-expanded={open}
-              aria-label="Toggle navigation"
-              onClick={() => setOpen(!open)}
-            >
-              <span className="hamburger-icon">
-                <span></span>
-                <span></span>
-                <span></span>
-              </span>
-            </button>
           </div>
         </div>
 

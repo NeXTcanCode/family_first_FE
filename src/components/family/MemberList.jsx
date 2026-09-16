@@ -37,7 +37,10 @@ export default function MemberList({ members, isCreator, creatorId, onRemove }) 
               </div>
             </div>
             <div className="d-flex align-items-center gap-2">
-              {m.lastLocation ? <span className="location-badge">Live</span> : null}
+              <span
+                className={`location-dot ${m.lastLocation ? "location-dot-live" : "location-dot-none"}`}
+                title={m.lastLocation ? "Sharing location" : "No location shared"}
+              />
               {canRemove ? (
                 <button
                   type="button"
