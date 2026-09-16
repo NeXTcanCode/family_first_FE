@@ -13,6 +13,7 @@ import MemberList from "../components/family/MemberList.jsx";
 import MemberMap from "../components/family/MemberMap.jsx";
 import AddMemberForm from "../components/family/AddMemberForm.jsx";
 import NotificationToast from "../components/notifications/NotificationToast.jsx";
+import AiDigest from "../components/notifications/AiDigest.jsx";
 import { useNotifications } from "../hooks/useNotifications.js";
 
 export default function FamilyPage() {
@@ -149,6 +150,8 @@ export default function FamilyPage() {
           ) : null}
         </div>
       </div>
+
+      <AiDigest familyId={id} />
 
       {/* Main Content Row */}
       <div className="row g-4">

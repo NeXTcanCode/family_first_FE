@@ -4,6 +4,7 @@ import { House } from "lucide-react";
 import { useFamilies } from "../hooks/useFamilies.js";
 import FamilyCard from "../components/family/FamilyCard.jsx";
 import LocationUpdater from "../components/location/LocationUpdater.jsx";
+import SavedPlacesForm from "../components/location/SavedPlacesForm.jsx";
 import NotificationToast from "../components/notifications/NotificationToast.jsx";
 import { useNotifications } from "../hooks/useNotifications.js";
 
@@ -27,6 +28,10 @@ export default function DashboardPage() {
         <div className="location-updater-badge">
           <LocationUpdater />
         </div>
+      </div>
+
+      <div className="mb-4">
+        <SavedPlacesForm />
       </div>
 
       {/* Section Header */}
