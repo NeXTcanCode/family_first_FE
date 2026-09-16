@@ -46,6 +46,9 @@ const notificationSlice = createSlice({
         n.read = true;
       });
     },
+    clearNotifications(state) {
+      state.items = [];
+    },
   },
 });
 
@@ -60,6 +63,7 @@ export const {
   clearToasts: clearToastsAction,
   addNotification: addNotificationAction,
   markAllNotificationsRead: markAllNotificationsReadAction,
+  clearNotifications: clearNotificationsAction,
 } = notificationSlice.actions;
 
 const store = configureStore({

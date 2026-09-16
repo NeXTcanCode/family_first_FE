@@ -3,7 +3,7 @@ import { NavLink, useNavigate } from "react-router-dom";
 import { useSelector, useDispatch } from "react-redux";
 import { Bell } from "lucide-react";
 import { useLogoutMutation } from "../../context/authMutations.js";
-import { markAllNotificationsReadAction } from "../../store/store.js";
+import { markAllNotificationsReadAction, clearNotificationsAction } from "../../store/store.js";
 import { timeAgo } from "../../utils/timeAgo.js";
 
 export default function NavBar() {
@@ -82,7 +82,16 @@ export default function NavBar() {
             {notifOpen ? (
               <div className="notification-dropdown d-none d-md-block">
                 <div className="notification-dropdown-header">
-                  Notifications
+                  <span>Notifications</span>
+                  {notifications.length > 0 ? (
+                    <button
+                      type="button"
+                      className="notification-clear-btn"
+                      onClick={() => dispatch(clearNotificationsAction())}
+                    >
+                      Clear
+                    </button>
+                  ) : null}
                 </div>
                 {notifications.length === 0 ? (
                   <div className="notification-empty">
@@ -166,6 +175,18 @@ export default function NavBar() {
             </button>
             {notifOpen ? (
               <div className="notification-dropdown notification-dropdown-mobile">
+                {notifications.length > 0 ? (
+                  <div className="notification-dropdown-header">
+                    <span>Notifications</span>
+                    <button
+                      type="button"
+                      className="notification-clear-btn"
+                      onClick={() => dispatch(clearNotificationsAction())}
+                    >
+                      Clear
+                    </button>
+                  </div>
+                ) : null}
                 {notifications.length === 0 ? (
                   <div className="notification-empty">
                     No notifications yet.

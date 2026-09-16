@@ -1,18 +1,24 @@
 import { useState } from "react";
 import { useNavigate, Link } from "react-router-dom";
+import { useDispatch } from "react-redux";
 import { ArrowLeft, Users, PlusCircle } from "lucide-react";
 import { useCreateFamily } from "../hooks/useFamilyMutations.js";
+import { pushToastAction, addNotificationAction } from "../store/store.js";
 
 export default function FamilyCreatePage() {
   const navigate = useNavigate();
-  const { mutate, error, isPending } = useCreateFamily();
+  const dispatch = useDispatch();
+  const { mutateAsync, error, isPending } = useCreateFamily();
   const [name, setName] = useState("");
 
   const submit = async (e) => {
     e.preventDefault();
     try {
-      const data = await mutate(name);
-      navigate(`/family/${data.family.id}`);
+      const data = await mutateAsync(name);
+      const message = `"${data.family.name}" family circle created!`;
+      dispatch(pushToastAction(message));
+      dispatch(addNotificationAction({ message }));
+      navigate(`/family/${data.family._id}`);
     } catch {
       // error surfaced via hook
     }
