@@ -1,6 +1,11 @@
 import { io } from "socket.io-client";
 
-const SOCKET_URL = import.meta.env.VITE_SOCKET_URL || "http://localhost:4000";
+// Same-origin in production (proxied to the backend via public/_redirects) so the
+// socket handshake's auth cookie is first-party. Dev connects directly since
+// Vite (5173) and the API (4000) are same-site localhost.
+const SOCKET_URL =
+  import.meta.env.VITE_SOCKET_URL ||
+  (import.meta.env.DEV ? "http://localhost:4000" : window.location.origin);
 
 let socket = null;
 

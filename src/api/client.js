@@ -1,5 +1,10 @@
 // Thin fetch wrapper: base URL, credentials:'include', JSON, error normalization.
-const API_BASE = import.meta.env.VITE_API_URL || "https://family-first-be.onrender.com/api";
+// Same-origin "/api" in production (proxied to the backend via public/_redirects,
+// so the auth cookie is first-party instead of a cross-site cookie browsers block).
+// Dev talks directly to the local backend since Vite (5173) and the API (4000) are
+// same-site localhost, where cookies work fine without a proxy.
+const API_BASE =
+  import.meta.env.VITE_API_URL || (import.meta.env.DEV ? "http://localhost:4000/api" : "/api");
 
 async function request(path, options = {}) {
   const res = await fetch(`${API_BASE}${path}`, {
