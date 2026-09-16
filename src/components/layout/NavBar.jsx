@@ -70,7 +70,7 @@ export default function NavBar() {
           {/* Right Action Utilities */}
           <div className="d-flex align-items-center gap-2 position-relative">
             <button
-              className="nav-icon-circle d-none d-md-inline-flex"
+              className="nav-icon-circle"
               title="Notifications"
               type="button"
               onClick={toggleNotifications}
@@ -80,7 +80,7 @@ export default function NavBar() {
             </button>
 
             {notifOpen ? (
-              <div className="notification-dropdown d-none d-md-block">
+              <div className="notification-dropdown">
                 <div className="notification-dropdown-header">
                   <span>Notifications</span>
                   {notifications.length > 0 ? (
@@ -160,49 +160,6 @@ export default function NavBar() {
             >
               New Family
             </NavLink>
-            <button
-              className="capsule-link mobile-menu-action"
-              type="button"
-              onClick={toggleNotifications}
-            >
-              <Bell
-                size={16}
-                strokeWidth={2.2}
-                aria-hidden="true"
-                className="me-1"
-              />
-              Notifications{unreadCount > 0 ? ` (${unreadCount})` : ""}
-            </button>
-            {notifOpen ? (
-              <div className="notification-dropdown notification-dropdown-mobile">
-                {notifications.length > 0 ? (
-                  <div className="notification-dropdown-header">
-                    <span>Notifications</span>
-                    <button
-                      type="button"
-                      className="notification-clear-btn"
-                      onClick={() => dispatch(clearNotificationsAction())}
-                    >
-                      Clear
-                    </button>
-                  </div>
-                ) : null}
-                {notifications.length === 0 ? (
-                  <div className="notification-empty">
-                    No notifications yet.
-                  </div>
-                ) : (
-                  notifications.map((n) => (
-                    <div className="notification-item" key={n.id}>
-                      <p className="mb-0">{n.message}</p>
-                      <span className="notification-time">
-                        {timeAgo(n.timestamp)}
-                      </span>
-                    </div>
-                  ))
-                )}
-              </div>
-            ) : null}
             {user ? (
               <button
                 className="capsule-link mobile-menu-action"

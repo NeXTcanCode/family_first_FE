@@ -716,7 +716,7 @@ body {
   position: absolute;
   top: calc(100% + 0.5rem);
   right: 0;
-  width: 320px;
+  width: min(320px, calc(100vw - 2rem));
   max-height: 360px;
   overflow-y: auto;
   background: #ffffff;
@@ -724,13 +724,6 @@ body {
   border: 1px solid #f3f4f6;
   box-shadow: 0 12px 32px rgba(0, 0, 0, 0.12);
   z-index: 20;
-}
-
-.notification-dropdown-mobile {
-  position: static;
-  width: 100%;
-  box-shadow: none;
-  margin-top: 0.25rem;
 }
 
 .notification-dropdown-header {
