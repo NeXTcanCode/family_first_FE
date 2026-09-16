@@ -1,5 +1,5 @@
 // Thin fetch wrapper: base URL, credentials:'include', JSON, error normalization.
-const API_BASE = import.meta.env.VITE_API_URL || "http://localhost:4000/api";
+const API_BASE = import.meta.env.VITE_API_URL || "https://family-first-be.onrender.com/api";
 
 async function request(path, options = {}) {
   const res = await fetch(`${API_BASE}${path}`, {
