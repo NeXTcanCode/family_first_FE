@@ -1,4 +1,5 @@
 import { MapPin, UserMinus } from "lucide-react";
+import { timeAgo } from "../../utils/timeAgo.js";
 
 export default function MemberList({ members, isCreator, creatorId, onRemove }) {
   return (
@@ -27,6 +28,11 @@ export default function MemberList({ members, isCreator, creatorId, onRemove }) 
                       ? `${m.lastLocation.lat.toFixed(2)}, ${m.lastLocation.lng.toFixed(2)}`
                       : "No location shared yet"}
                   </span>
+                  {m.lastLocation && m.locationUpdatedAt ? (
+                    <span className="member-updated-time">
+                      &middot; Updated {timeAgo(m.locationUpdatedAt)}
+                    </span>
+                  ) : null}
                 </div>
               </div>
             </div>

@@ -905,6 +905,11 @@ body {
   cursor: not-allowed;
 }
 
+.member-updated-time {
+  white-space: nowrap;
+  color: var(--ink-muted);
+}
+
 .btn-remove-member {
   display: inline-flex;
   align-items: center;
