@@ -1,5 +1,11 @@
+import { createPortal } from "react-dom";
+
 // In-app confirmation modal — replaces window.confirm()'s browser-chrome
-// alert with something that matches the app's own styling.
+// alert with something that matches the app's own styling. Rendered via a
+// portal into document.body so it isn't trapped by an ancestor's CSS
+// (e.g. a `transform` on a hoverable card creates a new containing block
+// that breaks `position: fixed`, confining the overlay to that card instead
+// of the viewport).
 export default function ConfirmDialog({
   open,
   title = "Are you sure?",
@@ -12,7 +18,7 @@ export default function ConfirmDialog({
 }) {
   if (!open) return null;
 
-  return (
+  return createPortal(
     <div
       className="d-flex align-items-center justify-content-center"
       style={{
@@ -43,6 +49,7 @@ export default function ConfirmDialog({
           </button>
         </div>
       </div>
-    </div>
+    </div>,
+    document.body
   );
 }
