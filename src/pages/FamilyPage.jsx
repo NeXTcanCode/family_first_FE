@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { useParams, Link, useNavigate } from "react-router-dom";
 import { useSelector } from "react-redux";
-import { ArrowLeft, Users, Pencil, Check, X, Trash2, List, Map } from "lucide-react";
+import { ArrowLeft, Users, Pencil, Check, X, Trash2, List, Map, Copy } from "lucide-react";
 import { useFamily } from "../hooks/useFamilies.js";
 import {
   useAddMember,
@@ -12,6 +12,9 @@ import {
 import MemberList from "../components/family/MemberList.jsx";
 import MemberMap from "../components/family/MemberMap.jsx";
 import AddMemberForm from "../components/family/AddMemberForm.jsx";
+import InviteMemberForm from "../components/family/InviteMemberForm.jsx";
+import JoinRequestsPanel from "../components/family/JoinRequestsPanel.jsx";
+import LeaveFamilyButton from "../components/family/LeaveFamilyButton.jsx";
 import NotificationToast from "../components/notifications/NotificationToast.jsx";
 import AiDigest from "../components/notifications/AiDigest.jsx";
 import { useNotifications } from "../hooks/useNotifications.js";
@@ -28,7 +31,14 @@ export default function FamilyPage() {
   const [editingName, setEditingName] = useState(false);
   const [nameDraft, setNameDraft] = useState("");
   const [view, setView] = useState("list");
+  const [copied, setCopied] = useState(false);
   useNotifications();
+
+  const copyFamilyId = () => {
+    navigator.clipboard?.writeText(id);
+    setCopied(true);
+    setTimeout(() => setCopied(false), 1500);
+  };
 
   if (isLoading) {
     return (
@@ -126,6 +136,15 @@ export default function FamilyPage() {
               <p className="text-muted small mb-0">
                 {family.members?.length ?? 0} member{(family.members?.length ?? 0) === 1 ? "" : "s"} in this circle
               </p>
+              <button
+                type="button"
+                className="btn btn-sm btn-outline-secondary mt-2 d-inline-flex align-items-center gap-1"
+                onClick={copyFamilyId}
+                title="Share this ID so others can request to join"
+              >
+                <Copy size={14} />
+                <span>{copied ? "Copied!" : `Family ID: ${id}`}</span>
+              </button>
             </div>
           </div>
 
@@ -147,11 +166,15 @@ export default function FamilyPage() {
               <Trash2 size={16} />
               <span>{isDeleting ? "Deleting..." : "Delete Family"}</span>
             </button>
-          ) : null}
+          ) : (
+            <LeaveFamilyButton familyId={id} familyName={family.name} />
+          )}
         </div>
       </div>
 
       <AiDigest familyId={id} />
+
+      {isCreator ? <JoinRequestsPanel familyId={id} /> : null}
 
       {/* Main Content Row */}
       <div className="row g-4">
@@ -192,13 +215,20 @@ export default function FamilyPage() {
         </div>
 
         {isCreator ? (
-          <div className="col-12 col-lg-4">
+          <div className="col-12 col-lg-4 d-flex flex-column gap-4">
             <div className="party-card p-4">
               <h2 className="h5 fw-bold mb-2">Add Member</h2>
               <p className="text-muted small mb-3">
-                Invite family members by entering their registered email address.
+                Adds them immediately — no acceptance needed.
               </p>
               <AddMemberForm onAdd={mutate} error={addError?.message} isPending={isPending} />
+            </div>
+            <div className="party-card p-4">
+              <h2 className="h5 fw-bold mb-2">Invite Member</h2>
+              <p className="text-muted small mb-3">
+                Sends an invite they must accept — you can resend anytime if declined.
+              </p>
+              <InviteMemberForm familyId={id} />
             </div>
           </div>
         ) : null}

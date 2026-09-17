@@ -1,10 +1,19 @@
-import { useMutation, useQueryClient } from "@tanstack/react-query";
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import {
   createFamily,
   addMember,
   removeMember,
   updateFamily,
   deleteFamily,
+  requestToJoin,
+  getJoinRequests,
+  acceptJoinRequest,
+  rejectJoinRequest,
+  inviteMember,
+  getMyInvites,
+  acceptInvite,
+  rejectInvite,
+  leaveFamily,
 } from "../api/familyApi.js";
 
 export function useCreateFamily() {
@@ -43,6 +52,79 @@ export function useDeleteFamily(familyId) {
   const qc = useQueryClient();
   return useMutation({
     mutationFn: () => deleteFamily(familyId),
+    onSuccess: () => qc.resetQueries({ queryKey: ["families"] }),
+  });
+}
+
+export function useRequestToJoin() {
+  return useMutation({
+    mutationFn: (familyId) => requestToJoin(familyId),
+  });
+}
+
+export function useJoinRequests(familyId) {
+  return useQuery({
+    queryKey: ["families", familyId, "join-requests"],
+    queryFn: () => getJoinRequests(familyId),
+    enabled: Boolean(familyId),
+  });
+}
+
+export function useAcceptJoinRequest(familyId) {
+  const qc = useQueryClient();
+  return useMutation({
+    mutationFn: (userId) => acceptJoinRequest(familyId, userId),
+    onSuccess: () => {
+      qc.resetQueries({ queryKey: ["families"] });
+      qc.resetQueries({ queryKey: ["families", familyId, "join-requests"] });
+    },
+  });
+}
+
+export function useRejectJoinRequest(familyId) {
+  const qc = useQueryClient();
+  return useMutation({
+    mutationFn: (userId) => rejectJoinRequest(familyId, userId),
+    onSuccess: () => qc.resetQueries({ queryKey: ["families", familyId, "join-requests"] }),
+  });
+}
+
+export function useInviteMember(familyId) {
+  return useMutation({
+    mutationFn: (email) => inviteMember(familyId, email),
+  });
+}
+
+export function useMyInvites() {
+  return useQuery({
+    queryKey: ["invites", "me"],
+    queryFn: getMyInvites,
+  });
+}
+
+export function useAcceptInvite() {
+  const qc = useQueryClient();
+  return useMutation({
+    mutationFn: (familyId) => acceptInvite(familyId),
+    onSuccess: () => {
+      qc.resetQueries({ queryKey: ["families"] });
+      qc.resetQueries({ queryKey: ["invites", "me"] });
+    },
+  });
+}
+
+export function useRejectInvite() {
+  const qc = useQueryClient();
+  return useMutation({
+    mutationFn: (familyId) => rejectInvite(familyId),
+    onSuccess: () => qc.resetQueries({ queryKey: ["invites", "me"] }),
+  });
+}
+
+export function useLeaveFamily(familyId) {
+  const qc = useQueryClient();
+  return useMutation({
+    mutationFn: () => leaveFamily(familyId),
     onSuccess: () => qc.resetQueries({ queryKey: ["families"] }),
   });
 }

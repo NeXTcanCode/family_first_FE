@@ -5,6 +5,8 @@ import { useFamilies } from "../hooks/useFamilies.js";
 import FamilyCard from "../components/family/FamilyCard.jsx";
 import LocationUpdater from "../components/location/LocationUpdater.jsx";
 import SavedPlacesForm from "../components/location/SavedPlacesForm.jsx";
+import JoinFamilyForm from "../components/family/JoinFamilyForm.jsx";
+import MyInvitesPanel from "../components/family/MyInvitesPanel.jsx";
 import NotificationToast from "../components/notifications/NotificationToast.jsx";
 import { useNotifications } from "../hooks/useNotifications.js";
 
@@ -30,6 +32,8 @@ export default function DashboardPage() {
         </div>
       </div>
 
+      <MyInvitesPanel />
+
       <div className="mb-4">
         <SavedPlacesForm />
       </div>
@@ -44,6 +48,11 @@ export default function DashboardPage() {
         </div>
 
         {/* Content State */}
+        <div className="party-card p-3 mb-4">
+          <h3 className="h6 fw-bold mb-2">Have a family ID?</h3>
+          <JoinFamilyForm />
+        </div>
+
         {isLoading ? (
           <div className="text-center py-5">
             <div className="spinner-border text-primary" role="status">

@@ -45,8 +45,19 @@ export function useNotifications() {
     } else if (name === "family:deleted") {
       notify("A family circle was deleted.");
       if (isViewingFamily(payload?.familyId)) navigate("/");
+    } else if (name === "join:requested") {
+      notify(`Someone wants to join "${payload?.familyName ?? "your family"}".`);
+    } else if (name === "join:rejected") {
+      notify(`Your request to join "${payload?.familyName ?? "a family"}" was declined.`);
+    } else if (name === "invite:received") {
+      notify(`You've been invited to join "${payload?.familyName ?? "a family"}".`);
+    } else if (name === "invite:rejected") {
+      notify(`Your invite to join "${payload?.familyName ?? "your family"}" was declined.`);
     }
     qc.resetQueries({ queryKey: ["families"] });
+    if (name === "invite:received" || name === "invite:rejected") {
+      qc.resetQueries({ queryKey: ["invites", "me"] });
+    }
   }, [notify, qc, currentUserId, isViewingFamily, navigate]);
 
   useSocket({ onEvent: handleEvent });
