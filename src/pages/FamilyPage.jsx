@@ -15,6 +15,7 @@ import AddMemberForm from "../components/family/AddMemberForm.jsx";
 import InviteMemberForm from "../components/family/InviteMemberForm.jsx";
 import JoinRequestsPanel from "../components/family/JoinRequestsPanel.jsx";
 import LeaveFamilyButton from "../components/family/LeaveFamilyButton.jsx";
+import ConfirmDialog from "../components/common/ConfirmDialog.jsx";
 import NotificationToast from "../components/notifications/NotificationToast.jsx";
 import AiDigest from "../components/notifications/AiDigest.jsx";
 import { useNotifications } from "../hooks/useNotifications.js";
@@ -32,6 +33,7 @@ export default function FamilyPage() {
   const [nameDraft, setNameDraft] = useState("");
   const [view, setView] = useState("list");
   const [copied, setCopied] = useState(false);
+  const [confirmingDelete, setConfirmingDelete] = useState(false);
   useNotifications();
 
   const copyFamilyId = () => {
@@ -153,15 +155,7 @@ export default function FamilyPage() {
               type="button"
               className="btn-delete-family"
               disabled={isDeleting}
-              onClick={() => {
-                if (
-                  window.confirm(
-                    `Delete "${family.name}"? This removes all members and cannot be undone.`
-                  )
-                ) {
-                  deleteFamilyMutate(undefined, { onSuccess: () => navigate("/") });
-                }
-              }}
+              onClick={() => setConfirmingDelete(true)}
             >
               <Trash2 size={16} />
               <span>{isDeleting ? "Deleting..." : "Delete Family"}</span>
@@ -171,6 +165,18 @@ export default function FamilyPage() {
           )}
         </div>
       </div>
+
+      <ConfirmDialog
+        open={confirmingDelete}
+        title="Delete this family?"
+        message={`Delete "${family.name}"? This removes all members and cannot be undone.`}
+        confirmLabel="Delete"
+        onCancel={() => setConfirmingDelete(false)}
+        onConfirm={() => {
+          setConfirmingDelete(false);
+          deleteFamilyMutate(undefined, { onSuccess: () => navigate("/") });
+        }}
+      />
 
       <AiDigest familyId={id} />
 

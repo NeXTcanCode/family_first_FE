@@ -1,7 +1,11 @@
+import { useState } from "react";
 import { MapPin, UserMinus } from "lucide-react";
 import { timeAgo } from "../../utils/timeAgo.js";
+import ConfirmDialog from "../common/ConfirmDialog.jsx";
 
 export default function MemberList({ members, isCreator, creatorId, onRemove }) {
+  const [pendingRemoval, setPendingRemoval] = useState(null);
+
   return (
     <div className="d-flex flex-column gap-2">
       {members.map((m) => {
@@ -46,11 +50,7 @@ export default function MemberList({ members, isCreator, creatorId, onRemove }) 
                   type="button"
                   className="btn-remove-member"
                   title={`Remove ${m.firstName} from this family`}
-                  onClick={() => {
-                    if (window.confirm(`Remove ${m.firstName} ${m.lastName} from this family?`)) {
-                      onRemove(m._id);
-                    }
-                  }}
+                  onClick={() => setPendingRemoval(m)}
                 >
                   <UserMinus size={16} />
                 </button>
@@ -59,6 +59,22 @@ export default function MemberList({ members, isCreator, creatorId, onRemove }) 
           </div>
         );
       })}
+
+      <ConfirmDialog
+        open={Boolean(pendingRemoval)}
+        title="Remove member?"
+        message={
+          pendingRemoval
+            ? `Remove ${pendingRemoval.firstName} ${pendingRemoval.lastName} from this family?`
+            : ""
+        }
+        confirmLabel="Remove"
+        onCancel={() => setPendingRemoval(null)}
+        onConfirm={() => {
+          onRemove(pendingRemoval._id);
+          setPendingRemoval(null);
+        }}
+      />
     </div>
   );
 }
