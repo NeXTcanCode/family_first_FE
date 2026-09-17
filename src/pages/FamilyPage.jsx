@@ -4,14 +4,14 @@ import { useSelector } from "react-redux";
 import { ArrowLeft, Users, Pencil, Check, X, Trash2, List, Map, Copy } from "lucide-react";
 import { useFamily } from "../hooks/useFamilies.js";
 import {
-  useAddMember,
+  // useAddMember, // commented out with the Add Member UI below
   useRemoveMember,
   useUpdateFamily,
   useDeleteFamily,
 } from "../hooks/useFamilyMutations.js";
 import MemberList from "../components/family/MemberList.jsx";
 import MemberMap from "../components/family/MemberMap.jsx";
-import AddMemberForm from "../components/family/AddMemberForm.jsx";
+// import AddMemberForm from "../components/family/AddMemberForm.jsx";
 import InviteMemberForm from "../components/family/InviteMemberForm.jsx";
 import JoinRequestsPanel from "../components/family/JoinRequestsPanel.jsx";
 import LeaveFamilyButton from "../components/family/LeaveFamilyButton.jsx";
@@ -25,7 +25,7 @@ export default function FamilyPage() {
   const navigate = useNavigate();
   const user = useSelector((s) => s.auth.user);
   const { data, isLoading, error } = useFamily(id);
-  const { mutate, error: addError, isPending } = useAddMember(id);
+  // const { mutate, error: addError, isPending } = useAddMember(id);
   const { mutate: removeMember } = useRemoveMember(id);
   const { mutate: renameFamily, isPending: isRenaming } = useUpdateFamily(id);
   const { mutate: deleteFamilyMutate, isPending: isDeleting } = useDeleteFamily(id);
@@ -222,13 +222,17 @@ export default function FamilyPage() {
 
         {isCreator ? (
           <div className="col-12 col-lg-4 d-flex flex-column gap-4">
-            <div className="party-card p-4">
+            {/* Commented out for now — adding directly skips the invited
+                person's ability to accept/decline, which the Invite flow
+                already covers properly. Revisit if a no-consent add is
+                ever needed again. */}
+            {/* <div className="party-card p-4">
               <h2 className="h5 fw-bold mb-2">Add Member</h2>
               <p className="text-muted small mb-3">
                 Adds them immediately — no acceptance needed.
               </p>
               <AddMemberForm onAdd={mutate} error={addError?.message} isPending={isPending} />
-            </div>
+            </div> */}
             <div className="party-card p-4">
               <h2 className="h5 fw-bold mb-2">Invite Member</h2>
               <p className="text-muted small mb-3">
